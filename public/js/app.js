@@ -6,34 +6,16 @@
   const lsGet = (k) => { try { return localStorage.getItem(k); } catch { return null; } };
   const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch { /* sem armazenamento */ } };
 
-  /* Instalar no iPhone: só o Safari oferece "Adicionar à Tela de Início" (WhatsApp, Instagram e Chrome não),
-     e ele não instala sozinho: a pessoa precisa tocar nos botões. */
-  const ua = navigator.userAgent;
-  const ehIOS = /iphone|ipad|ipod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  const ehSafari = /safari/i.test(ua) && !/crios|fxios|edgios|opios|gsa\/|fban|fbav|instagram|line\/|twitter|whatsapp|snapchat|tiktok|musical_ly/i.test(ua);
-  const instalado = !!navigator.standalone || (window.matchMedia && matchMedia('(display-mode: standalone)').matches);
-  const mostrarInstalar = () => ehIOS && !instalado && lsGet('banca-instalar-ocultar') !== '1';
-  const dicaInstalar = (ocultavel) => '<div style="margin-bottom:20px">' + U.aviso('info', ehSafari
-    ? '<b>Instale como aplicativo no iPhone.</b> Toque em ' + icon('export') + ' <b>Compartilhar</b> (barra do Safari) e depois em <b>Adicionar à Tela de Início</b>. Assim abre em tela cheia, como um app.'
-    : '<b>Para instalar como aplicativo, abra no Safari.</b> Este link foi aberto fora do Safari (WhatsApp, Chrome ou outro app), que não oferece "Adicionar à Tela de Início". Copie o link, abra o <b>Safari</b> e cole na barra de endereço.<br><button class="btn sm" type="button" data-copiar-link>Copiar link</button>') +
-    (ocultavel ? '<button class="btn sm" type="button" data-acao="ocultar-instalar" style="margin-top:10px">Entendi, não mostrar de novo</button>' : '') + '</div>';
-  document.addEventListener('click', async (e) => {
-    const b = e.target.closest('[data-copiar-link]');
-    if (!b) return;
-    const link = location.href.split('#')[0];
-    try { await navigator.clipboard.writeText(link); b.textContent = 'Link copiado'; } catch { b.insertAdjacentHTML('afterend', '<div class="muted" style="margin-top:8px;word-break:break-all;user-select:all">' + esc(link) + '</div>'); b.remove(); }
-  });
-
   document.documentElement.dataset.theme = lsGet('banca-tema') || 'dark';
   try { await S.carregar(); } catch (e) {
     if (e.codigo) {
       const msgErro = e.message !== 'Digite o código de acesso.';
       document.getElementById('app').innerHTML =
-        '<div class="boot" style="padding:24px;align-content:center"><div style="width:min(380px,100%)">' + (ehIOS && !instalado ? dicaInstalar(false) : '') + '<form id="form-codigo" class="panel" autocomplete="off">' +
+        '<div class="boot" style="padding:24px"><form id="form-codigo" class="panel" style="width:min(380px,100%)" autocomplete="off">' +
         '<h2 style="margin-bottom:6px">Banca de Palha</h2><p class="muted" style="margin-bottom:16px">Digite o código de acesso. Só é preciso uma vez neste aparelho.</p>' +
         (msgErro ? '<div class="form-erro">' + esc(e.message) + '</div>' : '') +
         '<div class="field"><label for="codigo">Código de acesso</label><input id="codigo" name="codigo" type="password" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" required autofocus></div>' +
-        '<button class="btn primary" type="submit" style="width:100%">Entrar</button></form></div></div>';
+        '<button class="btn primary" type="submit" style="width:100%">Entrar</button></form></div>';
       document.getElementById('form-codigo').addEventListener('submit', (ev) => {
         ev.preventDefault();
         S.definirCodigo(ev.target.elements.codigo.value);
@@ -105,7 +87,6 @@
         (sit === 'conflito' ? '<div style="margin-bottom:20px">' + U.aviso('bad', '<b>Os dados foram alterados em outro aparelho.</b> Para não perder nada, recarregue a página antes de continuar.<br><button class="btn" onclick="location.reload()">Recarregar agora</button>') + '</div>' : '') +
         (sit === 'offline' ? '<div style="margin-bottom:20px">' + U.aviso('warn', '<b>Sem internet.</b> Mostrando os últimos dados que este aparelho guardou. Dá para consultar, mas não para registrar.<br><button class="btn" onclick="location.reload()">Tentar de novo</button>') + '</div>' : '') +
         (S.modo === 'local' ? '<div style="margin-bottom:20px">' + U.aviso('warn', location.hostname === 'localhost' || location.hostname === '127.0.0.1' ? 'Sem servidor: os dados estão sendo guardados só neste navegador. Para salvar em arquivo, abra o programa por <b>iniciar.bat</b>.' : '<b>Sem ligação com a nuvem.</b> Os dados estão sendo guardados só neste aparelho. Falta preencher <b>js/config.js</b> com os dados do Supabase.') + '</div>' : '') +
-        (mostrarInstalar() ? dicaInstalar(true) : '') +
         '<div class="' + (chaveRota !== ultimaRota ? 'view' : '') + '">' + corpo + '</div></main></div>';
     ultimaRota = chaveRota;
     window.scrollTo(0, chaveRota === ultimaRotaScroll ? y : 0);
@@ -118,7 +99,6 @@
     if (!el) { const lk = e.target.closest('.nav a'); if (lk) document.getElementById('side')?.classList.remove('open'); return; }
     const nome = el.dataset.acao;
     if (el.disabled) return;
-    if (nome === 'ocultar-instalar') { lsSet('banca-instalar-ocultar', '1'); render(); return; }
     if (nome === 'menu') { document.getElementById('side').classList.toggle('open'); return; }
     if (nome === 'tema') {
       const novo = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';

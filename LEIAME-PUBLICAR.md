@@ -26,7 +26,7 @@ O iOS **não instala PWA sozinho**: a pessoa precisa fazer isso uma vez, no **Sa
 2. Toque em **Compartilhar** e depois em **Adicionar à Tela de Início**.
 3. Abra pelo ícone da tela inicial: roda em tela cheia, como app.
 
-Enquanto estiver aberto no Safari (e não instalado), o programa mostra um aviso com esses passos. Ele some ao tocar em "Entendi" ou depois de instalado.
+Se "Adicionar à Tela de Início" não aparecer (o programa não controla isso, é o Safari): confira se está no **Safari** e não em WhatsApp, Instagram ou Chrome; se **não** é uma aba **privada**; no iOS 26 o botão Compartilhar pode estar dentro do menu **...** da barra do Safari; e se a Tela de Início tem espaço livre.
 
 Sem internet, o app abre e mostra os últimos dados que o aparelho guardou, **só para consulta**. Para registrar, precisa de internet.
 

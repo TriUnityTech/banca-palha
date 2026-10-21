@@ -256,8 +256,6 @@ input[type="date"] { -webkit-appearance: none; appearance: none; min-width: 0; t
 #toast-root { bottom: max(18px, env(safe-area-inset-bottom)); right: max(18px, env(safe-area-inset-right)); }
 .overlay { padding: max(16px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left)); }
 .modal-foot { padding-bottom: max(22px, env(safe-area-inset-bottom)); }
-.install-hint { display: flex; align-items: flex-start; gap: 12px; }
-.install-hint .grow { flex: 1; min-width: 0; }
 @media (max-width: 860px) {
   body { background-attachment: scroll; }
   .main { padding-left: max(18px, env(safe-area-inset-left)); padding-right: max(18px, env(safe-area-inset-right)); padding-bottom: calc(80px + env(safe-area-inset-bottom)); }
